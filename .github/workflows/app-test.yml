@@ -21,7 +21,7 @@ jobs:
       with:
         python-version: 3.9
     - name: Login to Docker
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      run: docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
       env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

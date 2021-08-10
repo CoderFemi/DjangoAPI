@@ -1,2 +1,2 @@
 # DjangoAPI
-Source code for Recipe App API built with Django
+Recipe App API built with Django

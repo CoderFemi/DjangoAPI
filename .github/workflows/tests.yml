@@ -22,7 +22,7 @@ jobs:
       env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Run all tests
+    - name: Run every tests
       run: |
         pip install docker-compose
         docker-compose build

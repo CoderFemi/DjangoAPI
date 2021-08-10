@@ -1,0 +1,3 @@
+# Install versions with latest security patches but not any version that may contain changes that would break the project.
+Django>=3.2.6,<3.3.0
+djangorestframework>=3.12.4,<3.13.0

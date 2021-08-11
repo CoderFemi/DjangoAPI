@@ -10,8 +10,8 @@ class ModelTests(TestCase):
         password = 'pass1234'
         user = get_user_model().objects.create_user(  # type:ignore
             email=email,
-			password=password
-		)
+            password=password,
+        )
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))

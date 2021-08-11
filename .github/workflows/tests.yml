@@ -22,8 +22,8 @@ jobs:
       env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Run every tests
+    - name: Run tests
       run: |
         pip install docker-compose
         docker-compose build
-        docker-compose run app sh -c "python manage.py test && flake8"
+        docker-compose run app sh -c "python manage.py wait_for_db && python manage.py test && flake8"

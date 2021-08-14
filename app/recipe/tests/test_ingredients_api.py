@@ -31,7 +31,9 @@ class PrivateIngredientsAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user('test@email.com', 'pass1234')
+        self.user = get_user_model().objects.create_user(  # type:ignore
+            'test@email.com', 'pass1234'
+        )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_ingredient_list(self):
@@ -44,11 +46,13 @@ class PrivateIngredientsAPITests(TestCase):
         ingredients = Ingredient.objects.all().order_by('-name')
         serializer = IngredientSerializer(ingredients, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data, serializer.data)  # type:ignore
 
     def test_ingredients_limited_to_user(self):
         '''Test that only ingredients for authenticated user are returned'''
-        user2 = get_user_model().objects.create_user('other@email.com', 'pass1234')
+        user2 = get_user_model().objects.create_user(  # type:ignore
+            'other@email.com', 'pass1234'
+        )
         Ingredient.objects.create(user=user2, name='Sea Salt')
 
         ingredient = Ingredient.objects.create(user=self.user, name='Garlic')
@@ -56,8 +60,8 @@ class PrivateIngredientsAPITests(TestCase):
         res = self.client.get(INGREDIENTS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
-        self.assertEqual(res.data[0]['name'], ingredient.name)
+        self.assertEqual(len(res.data), 1)  # type:ignore
+        self.assertEqual(res.data[0]['name'], ingredient.name)  # type:ignore
 
     def test_create_ingredient_successful(self):
         """Test creating a new ingredient"""

@@ -29,7 +29,9 @@ class PrivateTagsApiTests(TestCase):
     '''Test the authorised user tags API'''
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user('test@email.com', 'pass1234')
+        self.user = get_user_model().objects.create_user(  # type:ignore
+            'test@email.com', 'pass1234'
+        )
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
@@ -42,19 +44,21 @@ class PrivateTagsApiTests(TestCase):
         tags = Tag.objects.all().order_by('-name')
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data, serializer.data)  # type:ignore
 
     def test_tags_limited_to_user(self):
         """Test that tags returned are for authenticated user"""
-        user2 = get_user_model().objects.create_user('testtwo@email.com', 'pass1234')
+        user2 = get_user_model().objects.create_user(  # type:ignore
+            'testtwo@email.com', 'pass1234'
+        )
         Tag.objects.create(user=user2, name='Dessert')
         tag = Tag.objects.create(user=self.user, name='Finger food')
 
         res = self.client.get(TAGS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
-        self.assertEqual(res.data[0]['name'], tag.name)
+        self.assertEqual(len(res.data), 1)  # type:ignore
+        self.assertEqual(res.data[0]['name'], tag.name)  # type:ignore
 
     def test_create_tag_successful(self):
         """Test creating a new tag"""

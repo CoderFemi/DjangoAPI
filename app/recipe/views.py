@@ -19,8 +19,18 @@ class BaseRecipeAttrViewSet(
 
     def get_queryset(self):
         """Return objects for the current authenticated user only"""
-        return self.queryset.filter(user=self.request.user).order_by(  # type:ignore
-            '-name'
+        assigned_only = bool(
+            int(self.request.query_params.get('assigned_only', 0))  # type:ignore
+        )
+        queryset = self.queryset
+
+        if assigned_only:
+            queryset = queryset.filter(recipe__isnull=False)  # type:ignore
+
+        return (
+            queryset.filter(user=self.request.user)  # type:ignore
+            .order_by('-name')
+            .distinct()
         )
 
     def perform_create(self, serializer):
@@ -58,6 +68,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     # Default Actions we have overridden
     def get_queryset(self):
         '''Retrieve the recipes for authenticated user'''
+
         tags = self.request.query_params.get('tags')  # type:ignore
         ingredients = self.request.query_params.get('ingredients')  # type:ignore
         queryset = self.queryset.filter(user=self.request.user)
